@@ -1,0 +1,862 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Davinci Barber</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Davinci Barber: corte de cabello, barba y combo en la Carrera 1 # 6a 14. Abierto todos los días de 9:00 a. m. a 8:00 p. m. Reserva tu turno por WhatsApp.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Rubik+Dirt&display=swap">
+
+<style>
+/* Layout: la voz del logo — mayúsculas geométricas pesadas en oro y negro.
+   Bandas negras para la marca (hero, trabajos, pie), blancas para leer y reservar,
+   una banda dorada para la tarjeta de fidelidad. Una sola familia (Archivo) en dos anchos:
+   expandida y muy pesada para titulares, normal para el texto. */
+:root,.dark{
+  --bg:#0b0b0b;
+  --surface:#16150f;
+  --deep:#000000;
+  --line:#3b3221;
+  --line-soft:#241f15;
+  --text:#f2efe8;
+  --muted:#a39b8a;
+  --gold:#f0c23b;
+  --gold-deep:#d29a17;
+  --gold-light:#fed650;
+  --gold-ink:#f0c23b;   /* oro para texto: sobre negro es el oro del logo */
+  --alert:#e07a5f;
+  color-scheme:dark;
+}
+:root{
+  --on-gold:#0b0b0b;
+  --font:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.25,1,.5,1);
+  --z-sticky:10;
+  --z-bar:20;
+  --z-top:30;
+}
+/* Bandas blancas: mismos componentes, tokens invertidos; el oro de texto se oscurece para leerse. */
+.light{
+  --bg:#ffffff;
+  --surface:#f4f4f2;
+  --deep:#ffffff;
+  --line:#d9d6cf;
+  --line-soft:#e9e7e2;
+  --text:#121212;
+  --muted:#55524a;
+  --gold-ink:#8a6408;
+  --alert:#b3402a;
+  color-scheme:light;
+  background:var(--bg);
+  color:var(--text);
+}
+.light.alt{--bg:#f4f4f2;--surface:#ffffff}
+/* Banda dorada: el oro del logo como superficie, texto negro */
+.gold{
+  --text:#0b0b0b;
+  --muted:#3d2f05;
+  --gold-ink:#0b0b0b;
+  --line:rgba(11,11,11,.22);
+  color-scheme:light;
+  background:var(--gold);
+  color:var(--text);
+}
+.dark{color:var(--text)}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body::before{
+  content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);
+  z-index:var(--z-top);background:var(--deep);
+}
+img{display:block;max-width:100%;height:auto}
+
+.wrap{
+  max-width:1180px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.band{padding-block:clamp(56px,8vw,104px)}
+
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit}
+.display{
+  font-weight:850;font-stretch:122%;text-transform:uppercase;
+  letter-spacing:-.005em;line-height:.94;
+}
+h2.display{font-size:clamp(2.1rem,1.2rem + 3.4vw,3.7rem)}
+.lede{color:var(--muted);max-width:56ch;font-size:18px}
+.sec-head{display:grid;gap:16px;margin-bottom:clamp(28px,4vw,48px)}
+
+:focus-visible{outline:2px solid var(--gold-ink);outline-offset:3px}
+
+/* ---------- Botones ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:48px;padding:12px 22px;border-radius:3px;border:1.5px solid transparent;
+  font-family:var(--font);font-size:15px;font-weight:700;font-stretch:110%;
+  letter-spacing:.02em;text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .12s var(--ease)
+}
+.btn:active{transform:scale(.98)}
+.btn-solid{
+  background:linear-gradient(145deg,var(--gold-light),var(--gold) 48%,var(--gold-deep));
+  color:var(--on-gold);border-color:var(--gold-deep)
+}
+.btn-solid:hover{background:var(--gold-light);border-color:var(--gold-light)}
+.btn-line{border-color:var(--line);color:var(--text);background:transparent}
+.btn-line:hover{border-color:var(--gold-ink);color:var(--gold-ink)}
+.btn-sm{min-height:44px;padding:9px 16px;font-size:14px}
+.btn-dark{background:var(--on-gold);color:var(--gold);border-color:var(--on-gold)}
+.btn-dark:hover{background:#262212}
+
+/* ---------- Encabezado ---------- */
+.topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:var(--z-sticky);
+  background:var(--deep);border-bottom:1px solid var(--line-soft);
+}
+.topbar .wrap{display:flex;align-items:center;gap:24px;min-height:68px}
+.mark{display:flex;align-items:center;gap:12px;text-decoration:none;margin-right:auto}
+.mark img{width:42px;height:42px}
+.mark span{font-weight:850;font-stretch:125%;font-size:18px;letter-spacing:.04em;text-transform:uppercase}
+.mark small{display:block;font-size:11px;font-weight:600;font-stretch:110%;letter-spacing:.24em;color:var(--gold-ink);margin-top:2px}
+.nav{display:flex;gap:26px}
+.nav a{font-size:15px;font-weight:500;color:var(--muted);text-decoration:none;padding-block:6px;border-bottom:1.5px solid transparent}
+.nav a:hover{color:var(--text);border-bottom-color:var(--gold)}
+@media (max-width:860px){.nav,.topbar .btn{display:none}}
+
+/* ---------- Hero ---------- */
+.hero{padding-block:clamp(40px,6vw,80px) clamp(48px,7vw,96px)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,72px);align-items:center}
+.hero h1{font-size:clamp(2.6rem,1rem + 6vw,5.75rem)}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{margin-top:24px;max-width:44ch;font-size:19px;line-height:1.55;color:var(--muted)}
+.hero-sub strong{color:var(--text);font-weight:600}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.hero-photo{margin:0;position:relative}
+.hero-photo a{display:block;overflow:hidden;border-radius:3px;background:var(--surface)}
+.hero-photo img{width:100%;aspect-ratio:470/595;object-fit:cover;animation:settle 1.1s var(--ease) both}
+@keyframes settle{from{transform:scale(1.05)}to{transform:none}}
+.hero-photo figcaption{margin-top:12px;font-size:14px;color:var(--muted)}
+.hero-photo figcaption b{color:var(--gold);font-weight:700}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-photo img{aspect-ratio:4/3;object-position:50% 72%}
+}
+
+/* ---------- Fidelidad ---------- */
+.fid-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,72px);align-items:center}
+@media (max-width:860px){.fid-grid{grid-template-columns:1fr}}
+.fid-grid > div > p{font-size:19px;max-width:40ch;margin-top:20px}
+.premios{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+.premio{
+  display:flex;align-items:baseline;gap:12px;padding:16px 22px;
+  border:2px solid var(--on-gold);border-radius:3px
+}
+.premio b{font-size:clamp(36px,4vw,48px);font-weight:900;font-stretch:125%;line-height:1}
+.premio span{font-size:16px;font-weight:600}
+.fid-note{font-size:16px!important;color:var(--muted);margin-top:22px!important}
+/* La tarjeta física, recreada. Escala con su propio ancho (cqw), así se ve igual en cualquier pantalla. */
+.fid-card{margin:0;width:100%;max-width:560px;justify-self:center;container-type:inline-size;transform:rotate(-3deg);transition:transform .6s var(--ease)}
+.fid-card:hover{transform:rotate(0)}
+.fc{
+  aspect-ratio:85/55;border-radius:3.4cqw;padding:5cqw 5.4cqw 4.6cqw;
+  display:grid;grid-template-columns:25cqw 1fr;grid-template-rows:auto 1fr auto;column-gap:5cqw;row-gap:2.6cqw;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(120% 90% at 88% 0%,#2a251b 0%,transparent 55%),
+    #0b0b0b;
+  color:#f2efe8;line-height:1.25;
+  box-shadow:0 3cqw 7cqw rgba(0,0,0,.38),inset 0 0 0 1px rgba(255,255,255,.07)
+}
+.fc-head{grid-column:1/-1;display:flex;justify-content:space-between;align-items:flex-start;gap:4cqw}
+.fc-title{font-family:"Rubik Dirt",var(--font);font-size:6.6cqw;line-height:.92;text-transform:uppercase;letter-spacing:.01em}
+.fc-brand{text-align:right;font-weight:850;font-stretch:125%;font-size:5.2cqw;line-height:1;text-transform:uppercase}
+.fc-brand small{display:block;margin-top:.9cqw;font-size:2.3cqw;font-weight:700;letter-spacing:.32em;color:var(--gold)}
+.fc-seal{align-self:center}
+.fc-seal img{width:100%;height:auto}
+.fc-stamps{display:flex;flex-direction:column;gap:1.7cqw;align-self:center;min-width:0}
+.fc-name{display:flex;align-items:center;gap:1.4cqw;background:#f2efe8;color:#0b0b0b;border-radius:.8cqw;padding:.8cqw 1.6cqw;font-size:2.3cqw;font-weight:800;text-transform:uppercase}
+.fc-rule{font-size:2cqw;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#d6d0c2}
+.fc-row{display:flex;align-items:center;gap:1.8cqw}
+.fc-row i{flex:none;width:7.6cqw;aspect-ratio:1;border-radius:50%;background:#f2efe8}
+.fc-row b{flex:none;display:grid;place-items:center;width:7.6cqw;aspect-ratio:1;border-radius:50%;background:var(--gold);color:#0b0b0b;font-size:2.4cqw;font-weight:900;font-stretch:110%}
+.fc-wa{display:flex;align-items:center;gap:1.3cqw;align-self:end;font-size:2.8cqw;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fc-wa svg{flex:none;width:3.8cqw;height:3.8cqw}
+.fc-foot{align-self:end;font-size:2cqw;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#d6d0c2}
+
+/* ---------- Agenda ---------- */
+.booking{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(24px,4vw,48px);align-items:start}
+@media (max-width:980px){.booking{grid-template-columns:1fr}}
+fieldset{border:0;margin:0 0 34px;padding:0;min-width:0}
+legend{display:flex;align-items:center;gap:12px;padding:0 0 14px;font-size:18px;font-weight:700;font-stretch:110%}
+legend .num{
+  display:grid;place-items:center;width:30px;height:30px;border-radius:50%;
+  background:var(--text);color:var(--bg);font-size:14px;font-weight:800
+}
+legend small{font-size:14px;font-weight:400;color:var(--muted);font-stretch:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font-family:var(--font);font-size:15px;color:var(--text);background:var(--surface);
+  border:1.5px solid var(--line);border-radius:3px;min-height:48px;padding:8px 16px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;line-height:1.25;
+  transition:border-color .15s var(--ease),background .15s var(--ease),transform .12s var(--ease)
+}
+.chip small{font-size:13px;color:var(--muted)}
+.chip:hover:not(:disabled){border-color:var(--gold-deep)}
+.chip:active:not(:disabled){transform:scale(.97)}
+.chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold-deep);color:var(--on-gold);font-weight:600}
+.chip[aria-pressed="true"] small{color:#3d2f05}
+.chip:disabled{opacity:.45;cursor:not-allowed}
+.chip-time{min-width:112px;align-items:center;font-variant-numeric:tabular-nums}
+.link-btn{
+  font-family:var(--font);font-size:15px;font-weight:600;color:var(--gold-ink);background:none;border:0;
+  padding:12px 4px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:44px
+}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:3px;margin-bottom:14px;background:var(--surface)}
+.seg button{
+  font-family:var(--font);font-size:15px;color:var(--muted);background:none;border:0;min-height:44px;padding:8px 18px;cursor:pointer
+}
+.seg button + button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg);font-weight:600}
+.note{font-size:15px;color:var(--muted)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:600px){.fields{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-size:15px;font-weight:600}
+label small{font-weight:400;color:var(--muted)}
+input,textarea{
+  font-family:var(--font);font-size:16px;color:var(--text);background:var(--deep);
+  border:1.5px solid var(--line);border-radius:3px;padding:12px 14px;width:100%;min-height:48px
+}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold-ink);outline-offset:1px}
+textarea{resize:vertical;min-height:84px}
+input[aria-invalid="true"]{border-color:var(--alert)}
+.err{font-size:14px;color:var(--alert);font-weight:500}
+.err:empty{display:none}
+
+/* Ticket */
+.ticket{
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 88px);
+  background:var(--surface);border-radius:3px;padding:26px 24px
+}
+@media (max-width:980px){.ticket{position:static}}
+.ticket h3{font-size:24px;font-weight:850;font-stretch:118%;text-transform:uppercase;line-height:1.05}
+.ticket dl{margin:20px 0 0;display:grid;gap:12px}
+.ticket .row{display:flex;justify-content:space-between;gap:16px;align-items:baseline;font-size:16px}
+.ticket dt{color:var(--muted);white-space:nowrap}
+.ticket dd{margin:0;text-align:right;min-width:0;overflow-wrap:anywhere}
+.ticket .total{
+  margin-top:18px;padding-top:16px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline
+}
+.ticket .total span{color:var(--muted)}
+.ticket .total strong{font-size:30px;font-weight:850;font-stretch:118%;color:var(--gold);font-variant-numeric:tabular-nums}
+.ticket .total strong.is-empty{font-size:16px;font-weight:400;font-stretch:100%;color:var(--muted)}
+.ticket-actions{display:grid;gap:10px;margin-top:22px}
+.ticket-actions .btn{width:100%}
+.ticket-foot{font-size:14px;color:var(--muted);margin-top:16px;line-height:1.5;max-width:46ch}
+.status{margin-top:16px;font-size:15px;line-height:1.5;border-radius:3px;padding:12px 14px}
+.status.is-ok{background:color-mix(in srgb,var(--gold) 14%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.status.is-error{background:color-mix(in srgb,var(--alert) 16%,transparent);border:1px solid color-mix(in srgb,var(--alert) 55%,transparent);color:var(--text)}
+
+/* ---------- Trabajos ---------- */
+.works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.work{position:relative;display:block;overflow:hidden;border-radius:3px;text-decoration:none;background:var(--surface)}
+.work img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .5s var(--ease)}
+.work:hover img{transform:scale(1.04)}
+.work span{
+  position:absolute;left:0;right:0;bottom:0;padding:44px 16px 14px;
+  background:linear-gradient(transparent,rgba(0,0,0,.82));
+  font-weight:800;font-stretch:115%;text-transform:uppercase;font-size:17px;color:#fff
+}
+@media (max-width:760px){
+  .works{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;padding-bottom:8px}
+  .work{flex:0 0 78%;scroll-snap-align:start}
+}
+.works-more{margin-top:24px;font-size:16px;color:var(--muted)}
+.works-more a{color:var(--gold);font-weight:600}
+
+/* ---------- Visítanos ---------- */
+.visit{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(28px,5vw,72px);align-items:center}
+@media (max-width:860px){.visit{grid-template-columns:1fr}.visit img{aspect-ratio:4/3;object-fit:cover;object-position:50% 40%}}
+.visit img{border-radius:3px}
+.info{margin:30px 0 0;display:grid;gap:0;border-top:2px solid var(--text)}
+.info > div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding-block:18px;border-bottom:1px solid var(--line)}
+@media (max-width:520px){.info > div{grid-template-columns:1fr;gap:4px}}
+.info dt{color:var(--muted)}
+.info dd{margin:0;font-size:20px;font-weight:700;font-stretch:108%}
+.phone-line{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.phone{color:var(--text);text-decoration:none;font-variant-numeric:tabular-nums;border-bottom:2px solid var(--gold)}
+.socials{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+
+/* ---------- Pie ---------- */
+footer{background:var(--deep);border-top:1px solid var(--line-soft)}
+footer .wrap{padding-block:36px;display:flex;flex-wrap:wrap;gap:20px 32px;align-items:center;justify-content:space-between;font-size:15px;color:var(--muted)}
+.foot-brand{display:flex;align-items:center;gap:16px}
+.foot-brand img{width:64px;height:64px}
+.foot-brand b{display:block;color:var(--text);font-weight:850;font-stretch:122%;text-transform:uppercase;font-size:17px}
+footer nav{display:flex;flex-wrap:wrap;gap:18px}
+footer nav a{color:var(--muted);text-decoration:none}
+footer nav a:hover{color:var(--gold)}
+
+/* ---------- Barra inferior (celular) ---------- */
+.mbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:var(--z-bar);
+  display:none;align-items:center;gap:12px;
+  background:var(--deep);border-top:1px solid var(--line);
+  padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  transition:transform .25s var(--ease)
+}
+.mbar-text{flex:1;min-width:0;font-size:14px;line-height:1.3;color:var(--muted)}
+.mbar-text b{display:block;color:var(--text);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbar.is-hidden{transform:translateY(110%)}
+@media (max-width:980px){
+  .mbar{display:flex}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="mark" href="#inicio" aria-label="Davinci Barber, inicio">
+      <img src="logo.png" alt="" width="42" height="42">
+      <span>Davinci<small>Barber</small></span>
+    </a>
+    <nav class="nav" aria-label="Secciones">
+      <a href="#agenda">Reservar</a>
+      <a href="#trabajos">Trabajos</a>
+      <a href="#visitanos">Ubicación</a>
+    </nav>
+    <a class="btn btn-solid btn-sm" href="#agenda">Reservar turno</a>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 class="display">No necesitas mirarte al <em>espejo</em></h1>
+        <p class="hero-sub">Tu barbero nunca falla. Corte de cabello, barba y combo en la <strong>Carrera 1 # 6a 14</strong>, abierto <strong>todos los días de 9:00&nbsp;a.&nbsp;m. a 8:00&nbsp;p.&nbsp;m.</strong></p>
+        <div class="hero-cta">
+          <a class="btn btn-solid" href="#agenda">Reservar turno</a>
+          <a class="btn btn-line" href="https://wa.me/573112852122" target="_blank" rel="noopener">WhatsApp 311 285 2122</a>
+        </div>
+      </div>
+      <figure class="hero-photo">
+        <a href="https://www.facebook.com/reel/1756598368996736/" target="_blank" rel="noopener">
+          <img src="img/corte-espejo.jpg" width="470" height="595" alt="Un barbero de Davinci Barber le muestra al cliente el corte terminado con dos espejos, bajo el aro de luz">
+        </a>
+        <figcaption>Del reel más visto de la barbería: <b>14 mil reproducciones</b></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================= AGENDA ================= -->
+  <section id="agenda" class="band light alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="display">Reserva tu turno</h2>
+        <p class="lede">Elige servicio, día y hora. Te abrimos WhatsApp con el mensaje listo y la barbería te confirma si el turno está libre.</p>
+      </div>
+
+      <div class="booking">
+        <form id="form" novalidate>
+          <fieldset id="step-svc">
+            <legend><span class="num">1</span> Servicio</legend>
+            <div class="chips" id="svcChips"></div>
+          </fieldset>
+
+          <fieldset id="step-day">
+            <legend><span class="num">2</span> Día</legend>
+            <div class="chips" id="dayChips"></div>
+            <button type="button" class="link-btn" id="moreDays">Ver la otra semana</button>
+          </fieldset>
+
+          <fieldset id="step-time">
+            <legend><span class="num">3</span> Hora <small>la que prefieras; la barbería te confirma</small></legend>
+            <div class="seg" id="bands" role="group" aria-label="Momento del día"></div>
+            <div class="chips" id="timeChips"></div>
+            <p class="note" id="timeNote"></p>
+          </fieldset>
+
+          <fieldset id="step-datos">
+            <legend><span class="num">4</span> Tus datos</legend>
+            <div class="fields">
+              <div class="field">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" aria-describedby="errNombre">
+                <p class="err" id="errNombre"></p>
+              </div>
+              <div class="field">
+                <label for="telefono">Celular con WhatsApp</label>
+                <input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" placeholder="10 dígitos" aria-describedby="errTelefono">
+                <p class="err" id="errTelefono"></p>
+              </div>
+              <div class="field full">
+                <label for="notas">¿Qué corte quieres? <small>(opcional)</small></label>
+                <textarea id="notas" name="notas" placeholder="Ej.: degradado bajo y dejar largo arriba"></textarea>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        <aside class="ticket dark" id="ticket">
+          <h3 id="ticketTitle">Tu turno</h3>
+          <dl>
+            <div class="row"><dt>Servicio</dt><dd id="tSvc">Sin elegir</dd></div>
+            <div class="row"><dt>Día</dt><dd id="tDay">Sin elegir</dd></div>
+            <div class="row"><dt>Hora</dt><dd id="tTime">Sin elegir</dd></div>
+          </dl>
+          <div class="total"><span>Precio</span><strong id="tTotal" class="is-empty">Elige un servicio</strong></div>
+          <div class="ticket-actions">
+            <a class="btn btn-solid" id="waLink" href="https://wa.me/573112852122" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+            <button class="btn btn-line" id="copyBtn" type="button">Copiar mensaje</button>
+          </div>
+          <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+          <p class="ticket-foot">Te confirmamos por WhatsApp si el turno está libre. Si no puedes venir, avísanos con dos horas de anticipación.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FIDELIDAD ================= -->
+  <section class="band gold" aria-labelledby="fid-title">
+    <div class="wrap fid-grid">
+      <div>
+        <h2 class="display" id="fid-title">Tarjeta de fidelidad</h2>
+        <p>Completa los espacios de tu tarjeta y gana descuento en tu corte.</p>
+        <div class="premios">
+          <div class="premio"><b>20%</b><span>corte a $16.000</span></div>
+          <div class="premio"><b>40%</b><span>corte a $12.000</span></div>
+        </div>
+        <p class="fid-note">Los premios se usan martes y miércoles. Pide tu tarjeta en tu próxima visita.</p>
+      </div>
+      <figure class="fid-card" role="img" aria-label="Tarjeta de fidelidad de Davinci Barber: espacio para tu nombre, dos filas de cuatro sellos con premio de 20% y de 40%, premios martes y miércoles, WhatsApp 311 285 21 22">
+        <div class="fc" aria-hidden="true">
+          <div class="fc-head">
+            <div class="fc-title">Tarjeta de<br>fidelidad</div>
+            <div class="fc-brand">Davinci<small>Barber</small></div>
+          </div>
+          <div class="fc-seal"><img src="logo.png" alt="" width="140" height="140" loading="lazy"></div>
+          <div class="fc-stamps">
+            <div class="fc-name">Nombre:</div>
+            <p class="fc-rule">Completa los espacios y gana premios</p>
+            <div class="fc-row"><i></i><i></i><i></i><i></i><b>20%</b></div>
+            <div class="fc-row"><i></i><i></i><i></i><i></i><b>40%</b></div>
+          </div>
+          <div class="fc-wa">
+            <svg viewBox="0 0 24 24"><path fill="#25d366" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/><path fill="#fff" d="M8.6 7.3c.3-.6.6-.6.9-.6h.6c.2 0 .4 0 .6.5l.8 1.9c.1.3 0 .5-.1.7l-.5.6c-.2.2-.2.4 0 .7.5.9 1.3 1.7 2.2 2.2.3.2.5.2.7 0l.6-.7c.2-.2.4-.3.7-.2l1.9.9c.3.1.5.3.5.5 0 .9-.6 1.8-1.5 2-1 .3-2.4 0-4.2-1.1-1.6-1-2.9-2.6-3.6-4.1-.6-1.4-.4-2.5-.1-3.3z"/></svg>
+            311 285 21 22
+          </div>
+          <div class="fc-foot">Premios martes y miércoles</div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================= TRABAJOS ================= -->
+  <section id="trabajos" class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="display">Trabajos</h2>
+        <p class="lede">Cortes reales de la barbería, tomados de sus reels. Toca una foto para ver el video.</p>
+      </div>
+      <div class="works">
+        <a class="work" href="https://www.facebook.com/reel/1786732075838112/" target="_blank" rel="noopener">
+          <img src="img/diseno-linea.jpg" width="350" height="350" loading="lazy" decoding="async" alt="Degradado bajo con una línea de diseño a navaja detrás de la oreja">
+          <span>Línea a navaja</span>
+        </a>
+        <a class="work" href="https://www.facebook.com/reel/1733889224485966/" target="_blank" rel="noopener">
+          <img src="img/degradado.jpg" width="380" height="380" loading="lazy" decoding="async" alt="Cliente de perfil con degradado y el cabello peinado hacia atrás, mientras el barbero termina">
+          <span>Degradado</span>
+        </a>
+        <a class="work" href="https://www.facebook.com/reel/1284041061455006/" target="_blank" rel="noopener">
+          <img src="img/local.jpg" width="470" height="600" loading="lazy" decoding="async" alt="Interior de Davinci Barber: sillón negro, sofá de espera y la puerta abierta a la calle">
+          <span>El local</span>
+        </a>
+      </div>
+      <p class="works-more"><a href="https://www.facebook.com/davincibarber/reels/" target="_blank" rel="noopener">Ver todos los reels en Facebook</a> o en <a href="https://www.tiktok.com/@danielpuentes326" target="_blank" rel="noopener">TikTok</a>.</p>
+    </div>
+  </section>
+
+  <!-- ================= VISÍTANOS ================= -->
+  <section id="visitanos" class="band light">
+    <div class="wrap visit">
+      <img src="img/fachada.jpg" width="470" height="590" loading="lazy" decoding="async" alt="Fachada de Davinci Barber al anochecer, con el poste de barbería junto a la entrada y la calle iluminada">
+      <div>
+        <h2 class="display">Visítanos</h2>
+        <dl class="info">
+          <div><dt>Dirección</dt><dd>Carrera 1 # 6a 14</dd></div>
+          <div><dt>Horario</dt><dd>Todos los días, 9:00&nbsp;a.&nbsp;m. – 8:00&nbsp;p.&nbsp;m.</dd></div>
+          <div>
+            <dt>Celular</dt>
+            <dd class="phone-line">
+              <a class="phone" href="tel:+573112852122">311 285 2122</a>
+              <button class="btn btn-line btn-sm" id="copyTel" type="button">Copiar número</button>
+            </dd>
+          </div>
+        </dl>
+        <div class="socials">
+          <a class="btn btn-solid btn-sm" href="https://wa.me/573112852122" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+          <a class="btn btn-line btn-sm" href="https://www.facebook.com/davincibarber/" target="_blank" rel="noopener">Facebook</a>
+          <a class="btn btn-line btn-sm" href="https://www.tiktok.com/@danielpuentes326" target="_blank" rel="noopener">TikTok</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-brand">
+      <img src="logo.png" alt="Logo de Davinci Barber" width="64" height="64">
+      <div><b>Davinci Barber</b>Carrera 1 # 6a 14 · Todos los días, 9&nbsp;a.&nbsp;m. – 8&nbsp;p.&nbsp;m.</div>
+    </div>
+    <nav aria-label="Redes">
+      <a href="https://wa.me/573112852122" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.facebook.com/davincibarber/" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://www.tiktok.com/@danielpuentes326" target="_blank" rel="noopener">TikTok</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="mbar dark" id="mbar">
+  <p class="mbar-text" id="mbarText"><b>Abierto hasta 8:00&nbsp;p.&nbsp;m.</b>Corte de cabello $20.000</p>
+  <a class="btn btn-solid" id="mbarBtn" href="#agenda">Reservar</a>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Datos reales (publicados por la barbería) ---------- */
+  var SERVICIOS=[
+    {id:"corte",nombre:"Corte de cabello",precio:20000,min:40,desc:"Clásico, militar, mullet, mohicano y muchos más."},
+    {id:"barba",nombre:"Corte de barba",precio:6000,min:20,desc:"Desde los estilos populares hasta los más clásicos."},
+    {id:"combo",nombre:"Corte de cabello + barba",precio:25000,min:60,desc:"El combo completo para salir con tu mejor versión."}
+  ];
+  var ABRE=9*60, CIERRA=20*60, PASO=30, MARGEN_HOY=60;   /* todos los días, 9 a. m. – 8 p. m. */
+  var BANDAS=[
+    {id:"manana",nombre:"Mañana",desde:540,hasta:720},
+    {id:"tarde",nombre:"Tarde",desde:720,hasta:1080},
+    {id:"noche",nombre:"Noche",desde:1080,hasta:1200}
+  ];
+  var WA="573112852122";
+  var DIAS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  var DIAS_C=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  var MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var CLAVE="davinci-reserva";
+
+  var state={svc:null,day:null,banda:null,time:null,todasFechas:false};
+  var tocado={nombre:false,telefono:false};
+
+  function $(id){return document.getElementById(id)}
+  function pesos(n){return "$"+n.toLocaleString("es-CO")}
+  function pad(n){return (n<10?"0":"")+n}
+  function hora(m){var h=Math.floor(m/60),x=m%60,s=h<12?"a. m.":"p. m.";return (h%12||12)+":"+pad(x)+" "+s}
+  function svcById(id){for(var i=0;i<SERVICIOS.length;i++){if(SERVICIOS[i].id===id)return SERVICIOS[i]}return null}
+  function lista(a){return a.length<2?a[0]:a.slice(0,-1).join(", ")+" y "+a[a.length-1]}
+
+  /* ---------- Fechas: 14 días desde hoy ---------- */
+  var hoy=new Date();hoy.setHours(0,0,0,0);
+  var FECHAS=[];
+  for(var i=0;i<14;i++){
+    var d=new Date(hoy.getFullYear(),hoy.getMonth(),hoy.getDate()+i);
+    FECHAS.push({key:d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),date:d,i:i});
+  }
+  function fechaByKey(k){for(var i=0;i<FECHAS.length;i++){if(FECHAS[i].key===k)return FECHAS[i]}return null}
+  function fechaLarga(f){return DIAS[f.date.getDay()]+" "+f.date.getDate()+" de "+MESES[f.date.getMonth()]}
+  function fechaCorta(f){return f.i===0?"Hoy":f.i===1?"Mañana":DIAS_C[f.date.getDay()]+" "+f.date.getDate()}
+
+  function horasDe(f,svc,banda){
+    var s=svcById(svc)||{min:20},out=[];
+    var ahora=new Date(),minHoy=ahora.getHours()*60+ahora.getMinutes()+MARGEN_HOY;
+    var desde=banda?banda.desde:ABRE,hasta=banda?banda.hasta:CIERRA;
+    for(var t=desde;t<hasta;t+=PASO){
+      if(t+s.min>CIERRA)break;
+      if(f.i===0&&t<minHoy)continue;
+      out.push(t);
+    }
+    return out;
+  }
+
+  /* ---------- Render de la agenda ---------- */
+  function chip(label,sub,pressed,disabled){
+    var b=document.createElement("button");
+    b.type="button";b.className="chip";
+    b.setAttribute("aria-pressed",String(!!pressed));
+    b.innerHTML=label+(sub?"<small>"+sub+"</small>":"");
+    if(disabled)b.disabled=true;
+    return b;
+  }
+
+  function renderServicios(){
+    var box=$("svcChips");box.innerHTML="";
+    SERVICIOS.forEach(function(s){
+      var b=chip(s.nombre,pesos(s.precio),state.svc===s.id);
+      b.addEventListener("click",function(){elegirServicio(s.id)});
+      box.appendChild(b);
+    });
+  }
+
+  function renderDias(){
+    var box=$("dayChips");box.innerHTML="";
+    var sel=state.day?fechaByKey(state.day):null;
+    var cuantos=(state.todasFechas||(sel&&sel.i>=7))?14:7;
+    FECHAS.slice(0,cuantos).forEach(function(f){
+      var libres=horasDe(f,state.svc,null).length>0;
+      var b=chip(fechaCorta(f),f.i<2?DIAS_C[f.date.getDay()]+" "+f.date.getDate()+" "+MESES[f.date.getMonth()].slice(0,3):MESES[f.date.getMonth()].slice(0,3)+(libres?"":" · sin turnos"),state.day===f.key,!libres);
+      if(!libres)b.querySelector("small").textContent=(f.i===0?"ya cerramos":"sin turnos");
+      b.addEventListener("click",function(){
+        state.day=f.key;state.time=null;
+        if(!state.banda)state.banda=primeraBanda();
+        else if(!horasDe(f,state.svc,bandaById(state.banda)).length)state.banda=primeraBanda();
+        render();
+      });
+      box.appendChild(b);
+    });
+    var more=$("moreDays");
+    more.hidden=cuantos===14;
+  }
+
+  function bandaById(id){for(var i=0;i<BANDAS.length;i++){if(BANDAS[i].id===id)return BANDAS[i]}return null}
+  function primeraBanda(){
+    var f=state.day?fechaByKey(state.day):null;if(!f)return BANDAS[0].id;
+    for(var i=0;i<BANDAS.length;i++){if(horasDe(f,state.svc,BANDAS[i]).length)return BANDAS[i].id}
+    return BANDAS[0].id;
+  }
+
+  function renderHoras(){
+    var seg=$("bands"),box=$("timeChips"),note=$("timeNote");
+    seg.innerHTML="";box.innerHTML="";
+    var f=state.day?fechaByKey(state.day):null;
+    if(!f){
+      seg.hidden=true;
+      note.textContent=state.svc?"Elige un día para ver las horas.":"Elige el servicio y el día para ver las horas.";
+      note.hidden=false;return;
+    }
+    seg.hidden=false;
+    var actual=bandaById(state.banda);
+    if(!actual||!horasDe(f,state.svc,actual).length)state.banda=primeraBanda();
+    BANDAS.forEach(function(bd){
+      var n=horasDe(f,state.svc,bd).length;
+      var b=document.createElement("button");
+      b.type="button";b.textContent=bd.nombre;
+      b.setAttribute("aria-pressed",String(state.banda===bd.id));
+      if(!n){b.disabled=true;b.style.opacity=".45";b.style.cursor="not-allowed"}
+      b.addEventListener("click",function(){state.banda=bd.id;render()});
+      seg.appendChild(b);
+    });
+    var horas=horasDe(f,state.svc,bandaById(state.banda));
+    horas.forEach(function(t){
+      var b=chip(hora(t),"",state.time===t);
+      b.classList.add("chip-time");
+      b.addEventListener("click",function(){state.time=t;render()});
+      box.appendChild(b);
+    });
+    if(horas.length){note.hidden=true}
+    else{note.textContent="No quedan horas en este momento del día. Prueba otro o escríbenos por WhatsApp.";note.hidden=false}
+  }
+
+  function elegirServicio(id){
+    state.svc=id;
+    var f=state.day?fechaByKey(state.day):null;
+    if(state.time!==null&&f&&horasDe(f,id,null).indexOf(state.time)<0)state.time=null;
+    render();
+  }
+
+  /* ---------- Mensaje ---------- */
+  var nombre=$("nombre"),telefono=$("telefono"),notas=$("notas");
+  var waLink=$("waLink"),statusBox=$("status"),mbar=$("mbar"),mbarBtn=$("mbarBtn"),mbarText=$("mbarText");
+
+  function completo(){return !!(state.svc&&state.day&&state.time!==null)}
+  function textoAbierto(){
+    var a=new Date(),m=a.getHours()*60+a.getMinutes();
+    if(m<ABRE)return "Abrimos a las "+hora(ABRE);
+    if(m<CIERRA)return "Abierto hasta "+hora(CIERRA);
+    return "Mañana desde "+hora(ABRE);
+  }
+  function celular(v){
+    var d=v.replace(/\D/g,"");
+    if(d.length===12&&d.indexOf("57")===0)d=d.slice(2);
+    return d;
+  }
+  function mensaje(){
+    var s=svcById(state.svc),f=fechaByKey(state.day);
+    var l=["Hola, quiero reservar un turno en Davinci Barber.",
+      "",
+      "Servicio: "+s.nombre+" ("+pesos(s.precio)+")",
+      "Día: "+fechaLarga(f),
+      "Hora: "+hora(state.time),
+      "Nombre: "+(nombre.value.trim()||"—"),
+      "Celular: "+(telefono.value.trim()||"—")];
+    if(notas.value.trim())l.push("Corte: "+notas.value.trim());
+    l.push("","¿Tienen ese turno libre?");
+    return l.join("\n");
+  }
+
+  function setStatus(tipo,texto){
+    if(!tipo){statusBox.hidden=true;statusBox.textContent="";statusBox.className="status";return}
+    statusBox.className="status "+(tipo==="ok"?"is-ok":"is-error");
+    statusBox.textContent=texto;statusBox.hidden=false;
+  }
+
+  function render(){
+    renderServicios();renderDias();renderHoras();
+    var s=state.svc?svcById(state.svc):null,f=state.day?fechaByKey(state.day):null;
+    $("tSvc").textContent=s?s.nombre:"Sin elegir";
+    $("tDay").textContent=f?fechaLarga(f):"Sin elegir";
+    $("tTime").textContent=state.time!==null?hora(state.time):"Sin elegir";
+    $("tTotal").textContent=s?pesos(s.precio):"Elige un servicio";$("tTotal").classList.toggle("is-empty",!s);
+    $("ticketTitle").textContent=completo()?s.nombre:"Tu turno";
+    var href=completo()?"https://wa.me/"+WA+"?text="+encodeURIComponent(mensaje()):"https://wa.me/"+WA;
+    waLink.href=href;
+
+    /* barra del celular */
+    if(completo()){
+      mbarText.innerHTML="<b></b>";
+      mbarText.firstChild.textContent=s.nombre+" · "+fechaCorta(f)+" "+hora(state.time);
+      mbarText.appendChild(document.createTextNode(pesos(s.precio)));
+      mbarBtn.textContent="Enviar";mbarBtn.href=href;mbarBtn.target="_blank";
+    }else if(s){
+      mbarText.innerHTML="<b></b>";
+      mbarText.firstChild.textContent=s.nombre+" · "+pesos(s.precio);
+      mbarText.appendChild(document.createTextNode(!f?"Falta el día y la hora":"Falta la hora"));
+      mbarBtn.textContent="Seguir";mbarBtn.href="#agenda";mbarBtn.removeAttribute("target");
+    }else{
+      mbarText.innerHTML="<b></b>";
+      mbarText.firstChild.textContent=textoAbierto();
+      mbarText.appendChild(document.createTextNode("Corte de cabello "+pesos(20000)));
+      mbarBtn.textContent="Reservar";mbarBtn.href="#agenda";mbarBtn.removeAttribute("target");
+    }
+    setStatus(null);
+    guardar();
+  }
+
+  /* ---------- Validación ---------- */
+  function validaNombre(mostrar){
+    var ok=nombre.value.trim().length>=2;
+    if(mostrar){
+      nombre.setAttribute("aria-invalid",String(!ok));
+      $("errNombre").textContent=ok?"":"Escribe tu nombre para apartar el turno.";
+    }
+    return ok;
+  }
+  function validaTelefono(mostrar){
+    var v=telefono.value.trim(),d=celular(v),msg="";
+    if(!v)msg="Escribe tu celular para que te confirmemos.";
+    else if(d.length!==10||d.charAt(0)!=="3")msg="Revisa el número: un celular en Colombia tiene 10 dígitos y empieza por 3.";
+    if(mostrar){
+      telefono.setAttribute("aria-invalid",String(!!msg));
+      $("errTelefono").textContent=msg;
+    }
+    return !msg;
+  }
+
+  nombre.addEventListener("blur",function(){if(nombre.value.trim()){tocado.nombre=true;validaNombre(true)}});
+  telefono.addEventListener("blur",function(){if(telefono.value.trim()){tocado.telefono=true;validaTelefono(true)}});
+  nombre.addEventListener("input",function(){if(tocado.nombre)validaNombre(true);render()});
+  telefono.addEventListener("input",function(){if(tocado.telefono)validaTelefono(true);render()});
+  notas.addEventListener("input",render);
+
+  function confirmar(e){
+    var faltan=[];
+    if(!state.svc)faltan.push("el servicio");
+    if(!state.day)faltan.push("el día");
+    if(state.time===null)faltan.push("la hora");
+    if(faltan.length){
+      e.preventDefault();
+      setStatus("error","Falta elegir "+lista(faltan)+".");
+      var paso=!state.svc?"step-svc":!state.day?"step-day":"step-time";
+      $(paso).scrollIntoView({block:"center"});
+      return;
+    }
+    tocado.nombre=tocado.telefono=true;
+    var okN=validaNombre(true),okT=validaTelefono(true);
+    if(!okN||!okT){
+      e.preventDefault();
+      setStatus("error","Revisa tus datos: "+lista([!okN&&"el nombre",!okT&&"el celular"].filter(Boolean))+".");
+      var campo=!okN?nombre:telefono;
+      campo.scrollIntoView({block:"center"});campo.focus({preventScroll:true});
+      return;
+    }
+    setStatus("ok","Abrimos WhatsApp con tu solicitud. Envíala para que la barbería te confirme el turno. ¿No se abrió? Escribe al +57 311 285 2122.");
+  }
+  waLink.addEventListener("click",confirmar);
+  mbarBtn.addEventListener("click",function(e){
+    if(completo()){confirmar(e);return}
+    e.preventDefault();
+    var paso=!state.svc?"step-svc":!state.day?"step-day":"step-time";
+    $(paso).scrollIntoView({block:"center"});
+  });
+
+  $("moreDays").addEventListener("click",function(){state.todasFechas=true;render()});
+
+  /* ---------- Copiar ---------- */
+  function copiar(texto,btn,etiqueta){
+    function listo(t){btn.textContent=t;setTimeout(function(){btn.textContent=etiqueta},1800)}
+    function respaldo(){
+      var ta=document.createElement("textarea");
+      ta.value=texto;ta.setAttribute("readonly","");ta.style.cssText="position:fixed;left:-9999px";
+      document.body.appendChild(ta);ta.select();
+      var ok=false;try{ok=document.execCommand("copy")}catch(err){}
+      document.body.removeChild(ta);
+      listo(ok?"Copiado":"No se pudo copiar");
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(function(){listo("Copiado")}).catch(respaldo);
+    }else respaldo();
+  }
+  $("copyBtn").addEventListener("click",function(e){
+    if(!completo()){confirmar(e);return}
+    copiar(mensaje(),this,"Copiar mensaje");
+  });
+  $("copyTel").addEventListener("click",function(){copiar("+57 311 285 2122",this,"Copiar número")});
+
+  /* ---------- Guardar el borrador en este navegador ---------- */
+  function guardar(){
+    try{localStorage.setItem(CLAVE,JSON.stringify({svc:state.svc,day:state.day,banda:state.banda,time:state.time,
+      nombre:nombre.value,telefono:telefono.value,notas:notas.value}))}catch(err){}
+  }
+  try{
+    var g=JSON.parse(localStorage.getItem(CLAVE)||"null");
+    if(g){
+      if(svcById(g.svc))state.svc=g.svc;
+      var f=fechaByKey(g.day);
+      if(f){
+        state.day=g.day;
+        state.banda=bandaById(g.banda)?g.banda:null;
+        if(typeof g.time==="number"&&horasDe(f,state.svc,null).indexOf(g.time)>=0)state.time=g.time;
+      }
+      nombre.value=g.nombre||"";telefono.value=g.telefono||"";notas.value=g.notas||"";
+    }
+  }catch(err){}
+
+  /* ---------- Barra del celular: se oculta cuando el ticket está a la vista ---------- */
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(es){
+      es.forEach(function(en){mbar.classList.toggle("is-hidden",en.isIntersecting)});
+    },{threshold:.35}).observe($("ticket"));
+  }
+
+  render();
+})();
+</script>
